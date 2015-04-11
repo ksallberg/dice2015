@@ -102,6 +102,8 @@ class Main():
 		self.sprites["myMissile"] = pygame.image.load(os.path.join('sprites','myMissile.png'))
 		self.sprites["enemyMissile"] = pygame.image.load(os.path.join('sprites','enemyMissile.png'))
 		self.sprites["cannon"] = pygame.image.load(os.path.join('sprites','cannon.png'))
+		self.sprites["gameover"] = pygame.image.load(os.path.join('sprites','gameover.png'))
+
 		self.myMissileMovementSpeed = [5,0]
 		self.enemyMissileMovementSpeed = [-1, -2]
 		self.gameOver = False
@@ -138,7 +140,12 @@ class Main():
 			pygame.display.flip()
 			if random.randint(0,100) == 1:
 				self.cannons.append(Cannon(self.sprites['cannon'], [850,360], (-4,0), random.randint(1000,4000)))
-	
+			
+		self.screen.fill((179, 253 ,255))
+		self.screen.blit(self.sprites["gameover"], (0,0))
+		self.scoreLabel = self.scoreFont.render(str((self.score)).zfill(6), 1, (255,0,0))
+		self.screen.blit(self.scoreLabel, (720, 0))
+		pygame.display.flip()
 		
 		
 	def checkIfCannonsShouldShoot(self):
