@@ -92,16 +92,14 @@ class Main():
 		self.clock = pygame.time.Clock()
 		
 		planeSprite = pygame.image.load(os.path.join('sprites','plane.png'))
-		self.plane = Plane(planeSprite, [200,150], 2)
+		self.plane = Plane(planeSprite, [200,150], 3)
 		self.sprites["myMissile"] = pygame.image.load(os.path.join('sprites','myMissile.png'))
 		self.sprites["enemyMissile"] = pygame.image.load(os.path.join('sprites','enemyMissile.png'))
 		self.sprites["cannon"] = pygame.image.load(os.path.join('sprites','cannon.png'))
 		self.myMissileMovementSpeed = [5,0]
-		self.enemyMissileMovementSpeed = [0, -2]
+		self.enemyMissileMovementSpeed = [-1, -2]
 		self.gameOver = False
 		pygame.time.set_timer(self.DRAWTERRAIN, 50)
-
-		
 
 	def main_loop(self):
 		while not self.gameOver:
@@ -116,7 +114,6 @@ class Main():
 			for e in pygame.event.get():
 				if e.type == self.DRAWTERRAIN:
 					self.terrain.move_terrain()
-					print "Move terrain"
 				if e.type == KEYDOWN:
 					if e.key == K_SPACE:
 						self.myMissiles.append(Missile(self.sprites["myMissile"], self.plane.getPosition(), self.myMissileMovementSpeed))
@@ -128,7 +125,7 @@ class Main():
 			self.checkCollisionWithShip()
 			pygame.display.flip()
 			if random.randint(0,100) == 1:
-				self.cannons.append(Cannon(self.sprites['cannon'], [850,320], (-3,0), random.randint(1000,4000)))
+				self.cannons.append(Cannon(self.sprites['cannon'], [850,350], (-4,0), random.randint(1000,4000)))
 	
 		
 		
@@ -149,6 +146,7 @@ class Main():
 			missile.rect.y = missile.y
 			if pygame.sprite.collide_rect(self.plane, missile):
 				self.gameOver = True
+				print "Game over"
 				break
 
 	def applyForcesOfTheWorld(self):
