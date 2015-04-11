@@ -20,7 +20,7 @@ class Main():
 
 		pygame.display.set_caption('Wallstreet Tycoon')
 
-		self.terrain = Terrain()
+		self.terrain = Terrain(100)
 		self.screen = pygame.display.set_mode((800,400))
 		self.clock = pygame.time.Clock()
 		self.sprites["plane"] = pygame.image.load(os.path.join('sprites','plane.png'))
