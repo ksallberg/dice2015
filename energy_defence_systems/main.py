@@ -90,8 +90,9 @@ class Main():
 		print "hello"
 		pygame.init()
 		
-		pygame.display.set_caption('Wallstreet Tycoon')
+		pygame.display.set_caption('Swaglord Rocket Hyper Mega Ultra Drive')
 
+		self.score = 0;
 		self.terrain = Terrain(20, (204, 161, 131), 300)
 		self.screen = pygame.display.set_mode((800,400))
 		self.clock = pygame.time.Clock()
@@ -101,16 +102,20 @@ class Main():
 		self.sprites["myMissile"] = pygame.image.load(os.path.join('sprites','myMissile2.png'))
 		self.sprites["enemyMissile"] = pygame.image.load(os.path.join('sprites','enemyMissile.png'))
 		self.sprites["cannon"] = pygame.image.load(os.path.join('sprites','cannon.png'))
+		self.sprites["gameover"] = pygame.image.load(os.path.join('sprites','gameover.png'))
+
 		self.myMissileMovementSpeed = [5,0]
 		self.enemyMissileMovementSpeed = [-1, -2]
 		self.gameOver = False
 		pygame.time.set_timer(self.DRAWTERRAIN, 50)
+		self.scoreFont = pygame.font.SysFont("monospace", 20)
+
 
 	def main_loop(self):
 		while not self.gameOver:
 			self.screen.fill((179, 253 ,255))
 			self.clock.tick(60)
-			
+			self.score += 1
 			keys = pygame.key.get_pressed()
 			if keys[K_UP]:
 				self.plane.moveUp()
@@ -135,8 +140,13 @@ class Main():
 			self.checkCollisionWithShip()
 			pygame.display.flip()
 			if random.randint(0,100) == 1:
-				self.cannons.append(Cannon(self.sprites['cannon'], [850,350], (-4,0), random.randint(1000,4000)))
-	
+				self.cannons.append(Cannon(self.sprites['cannon'], [850,360], (-4,0), random.randint(1000,4000)))
+			
+		self.screen.fill((179, 253 ,255))
+		self.screen.blit(self.sprites["gameover"], (0,0))
+		self.scoreLabel = self.scoreFont.render(str((self.score)).zfill(6), 1, (255,0,0))
+		self.screen.blit(self.scoreLabel, (720, 0))
+		pygame.display.flip()
 		
 		
 	def checkIfCannonsShouldShoot(self):
@@ -193,6 +203,10 @@ class Main():
 			
 	def drawOrRemoveSprites(self):
 		removeObjects = []
+		
+		
+		
+		
 		for missile in self.myMissiles:
 			if missile.getPosition()[0] > self.screen.get_width:
 				removeObjects.append(self.myMissles)
@@ -221,7 +235,10 @@ class Main():
 				self.screen.blit(missile.getSprite(), missile.getPosition())
 		
 		self.removeObjectsFromList(removeObjects, self.enemyMissiles)
-
+		
+		self.scoreLabel = self.scoreFont.render(str((self.score)).zfill(6), 1, (255,0,0))
+		self.screen.blit(self.scoreLabel, (720, 0))
+		
 		self.screen.blit(self.plane.getSprite(), self.plane.getPosition())
 
 	
