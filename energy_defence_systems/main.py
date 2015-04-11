@@ -125,6 +125,7 @@ class Main():
 			self.drawOrRemoveSprites()
 			self.applyForcesOfTheWorld()
 			self.checkIfCannonsShouldShoot()
+			self.checkCollisionWithShip()
 			pygame.display.flip()
 			if random.randint(0,100) == 1:
 				self.cannons.append(Cannon(self.sprites['cannon'], [850,320], (-3,0), random.randint(1000,4000)))
@@ -137,8 +138,16 @@ class Main():
 				self.enemyMissiles.append(Missile(self.sprites["enemyMissile"], cannon.getPosition(), self.enemyMissileMovementSpeed))
 	
 	def checkCollisionWithShip(self):
-		for missile in enemyMissiles:
-			if pygame.sprite.collide_mask(self.plane.getSprite(), self.missile.getSprite()):
+		for missile in self.enemyMissiles:
+			print self.plane.getSprite()
+			plane_rect = self.plane.getSprite().get_rect()
+			plane_rect.x = self.plane.x
+			plane_rect.y = self.plane.y
+			self.plane.rect = plane_rect
+			missile.rect = missile.getSprite().get_rect()
+			missile.rect.x = missile.x
+			missile.rect.y = missile.y
+			if pygame.sprite.collide_rect(self.plane, missile):
 				self.gameOver = True
 				break
 
