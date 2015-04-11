@@ -1,6 +1,7 @@
 import pygame
 import os.path
 import random
+import time
 from pygame.locals import *
 from terrain import Terrain
 from random import randint
@@ -102,7 +103,7 @@ class Main():
 		self.sprites["myMissile"] = pygame.image.load(os.path.join('sprites','myMissile2.png'))
 		self.sprites["enemyMissile"] = pygame.image.load(os.path.join('sprites','enemyMissile.png'))
 		self.sprites["cannon"] = pygame.image.load(os.path.join('sprites','cannon.png'))
-		self.sprites["gameover"] = pygame.image.load(os.path.join('sprites','gameover.png'))
+		self.sprites["gameover"] = pygame.image.load(os.path.join('sprites','gameOver.png'))
 
 		self.myMissileMovementSpeed = [5,0]
 		self.enemyMissileMovementSpeed = [-1, -2]
@@ -147,6 +148,7 @@ class Main():
 		self.scoreLabel = self.scoreFont.render(str((self.score)).zfill(6), 1, (255,0,0))
 		self.screen.blit(self.scoreLabel, (720, 0))
 		pygame.display.flip()
+		time.sleep(1000)
 		
 		
 	def checkIfCannonsShouldShoot(self):
