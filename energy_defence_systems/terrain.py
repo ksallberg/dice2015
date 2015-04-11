@@ -4,9 +4,10 @@ import random
 class Terrain():
 
     # a list of y coords
-    point_amount = 10
+    point_amount = 100
     points = []
     x_space = 25
+    mountain_height = 20
 
     # create some terrain points
     def __init__(self):
@@ -19,12 +20,17 @@ class Terrain():
         self.points.pop()
 
     def new_pos(self):
-        return self.points[0] + random.randint(0, 5) - random.randint(0, 5)
+        return (370 + random.randint(0, self.mountain_height) -
+                      random.randint(0, self.mountain_height))
 
     # Draw the terrain to the context
     def draw(self, screen):
         self.move_terrain()
-        for x in range(0, self.point_amount):
+        for i in range(0, self.point_amount):
             red = (255,0,0)
-            pygame.draw.rect(screen, red, (20, 20,50,50), 20)
+            pygame.draw.rect(screen,
+                             red,
+                             (self.x_space * i, self.points[i],
+                              self.x_space * i + 50, self.points[i] + 50),
+                             1)
         print "draw terrain"
