@@ -4,13 +4,18 @@ import random
 class Terrain():
 
     # a list of y coords
-    point_amount = 20
+    point_amount = 35
     points = []
-    x_space = 50
+    x_space = 25
+    color = None
+    baseline = 0
+    vertices = []
 
     # create some terrain points
-    def __init__(self, mountain_height):
+    def __init__(self, mountain_height, color, baseline):
         self.mountain_height = mountain_height
+        self.color = color
+        self.baseline = baseline
         for i in range(0, self.point_amount):
             self.points.append(self.new_pos())
 
@@ -20,19 +25,18 @@ class Terrain():
         self.points.pop(0)
 
     def new_pos(self):
-        return (300 + random.randint(0, self.mountain_height) -
-                      random.randint(0, self.mountain_height))
+        return (self.baseline + random.randint(0, self.mountain_height) -
+                                random.randint(0, self.mountain_height))
 
     # Draw the terrain to the context
     def draw(self, screen):
-        vertices = [(0,screen.get_height())]
+        self.vertices = [[0,screen.get_height()]]
         for i in range(0, self.point_amount):
-            red = (204, 161, 131)
             # Populate vertices
-            vertices.append((i * self.x_space, self.points[i]))
-        vertices.append((screen.get_width(), screen.get_height()))
-        vertices.append((0,screen.get_height()))
+            self.vertices.append([i * self.x_space, self.points[i]])
+        self.vertices.append([screen.get_width(), screen.get_height()])
+        self.vertices.append([0,screen.get_height()])
         pygame.draw.polygon(screen,
-                            red,
-                            vertices,
+                            self.color,
+                            self.vertices,
                             0)

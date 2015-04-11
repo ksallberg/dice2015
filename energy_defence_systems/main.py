@@ -68,7 +68,7 @@ class Main():
 		
 		pygame.display.set_caption('Wallstreet Tycoon')
 
-		self.terrain = Terrain(100)
+		self.terrain = Terrain(20, (204, 161, 131), 300)
 		self.screen = pygame.display.set_mode((800,400))
 		self.clock = pygame.time.Clock()
 		
