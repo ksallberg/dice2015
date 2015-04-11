@@ -28,7 +28,7 @@ class Main():
 
 	def main_loop(self):
 		while True:
-			self.screen.fill((0,0,0))
+			self.screen.fill((179, 253 ,255))
 			self.clock.tick(60)
 			
 			keys = pygame.key.get_pressed()
