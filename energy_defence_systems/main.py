@@ -98,7 +98,7 @@ class Main():
 		
 		planeSprite = pygame.image.load(os.path.join('sprites','plane.png'))
 		self.plane = Plane(planeSprite, [200,150], 3)
-		self.sprites["myMissile"] = pygame.image.load(os.path.join('sprites','myMissile.png'))
+		self.sprites["myMissile"] = pygame.image.load(os.path.join('sprites','myMissile2.png'))
 		self.sprites["enemyMissile"] = pygame.image.load(os.path.join('sprites','enemyMissile.png'))
 		self.sprites["cannon"] = pygame.image.load(os.path.join('sprites','cannon.png'))
 		self.myMissileMovementSpeed = [5,0]
@@ -130,6 +130,7 @@ class Main():
 			self.terrain.draw(self.screen)
 			self.drawOrRemoveSprites()
 			self.applyForcesOfTheWorld()
+			self.checkEnemyMissileDeath()
 			self.checkIfCannonsShouldShoot()
 			self.checkCollisionWithShip()
 			pygame.display.flip()
@@ -145,7 +146,6 @@ class Main():
 	
 	def checkCollisionWithShip(self):
 		for missile in self.enemyMissiles:
-			print self.plane.getSprite()
 			plane_rect = self.plane.getSprite().get_rect()
 			plane_rect.x = self.plane.x
 			plane_rect.y = self.plane.y
@@ -157,6 +157,24 @@ class Main():
 				self.gameOver = True
 				print "Game over"
 				break
+
+	def checkEnemyMissileDeath(self):
+		for enemyMissile in self.enemyMissiles:
+			enemyRect = enemyMissile.getSprite().get_rect()
+			enemyRect.x = enemyMissile.x
+			enemyRect.y = enemyMissile.y
+			enemyMissile.rect = enemyRect
+
+			for ownMissile in self.myMissiles:
+				ownRect = ownMissile.getSprite().get_rect()
+				ownRect.x = ownMissile.x
+				ownRect.y = ownMissile.y
+				ownMissile.rect = ownRect
+
+				if pygame.sprite.collide_rect(ownMissile, enemyMissile):
+					self.myMissiles.remove(ownMissile)
+					self.enemyMissiles.remove(enemyMissile)
+
 
 	def applyForcesOfTheWorld(self):
 		for missile in self.myMissiles:
