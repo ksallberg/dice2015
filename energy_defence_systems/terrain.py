@@ -4,9 +4,9 @@ import random
 class Terrain():
 
     # a list of y coords
-    point_amount = 100
+    point_amount = 20
     points = []
-    x_space = 25
+    x_space = 50
 
     # create some terrain points
     def __init__(self, mountain_height):
@@ -20,7 +20,7 @@ class Terrain():
         self.points.pop(0)
 
     def new_pos(self):
-        return (370 + random.randint(0, self.mountain_height) -
+        return (300 + random.randint(0, self.mountain_height) -
                       random.randint(0, self.mountain_height))
 
     # Draw the terrain to the context
