@@ -2,6 +2,7 @@ import pygame
 import os.path
 from pygame.locals import *
 from terrain import Terrain
+from random import randint
 
 
 class Cannon():
@@ -10,7 +11,7 @@ class Cannon():
 		self.position = position
 		
 	def shoot(self):
-		continue
+		return True
 	
 class Plane():
 	def __init__(self, sprite, initialPosition, deltaMovement):
@@ -59,10 +60,12 @@ class Main():
 	screen	= None
 	deltaMovement = 2
 	terrain = None
+	DRAWTERRAIN = USEREVENT + 1
+
 	def __init__(self):
 		print "hello"
 		pygame.init()
-
+		
 		pygame.display.set_caption('Wallstreet Tycoon')
 
 		self.terrain = Terrain(100)
@@ -73,6 +76,7 @@ class Main():
 		self.plane = Plane(planeSprite, [200,150], 2)
 		self.sprites["myMissile"] = pygame.image.load(os.path.join('sprites','myMissile.png'))
 		self.myMissileMovementSpeed = [5,0]
+		pygame.time.set_timer(self.DRAWTERRAIN, 50)
 
 		
 
@@ -87,13 +91,15 @@ class Main():
 			if keys[K_DOWN]:
 				self.plane.moveDown()
 			for e in pygame.event.get():
+				if e.type == self.DRAWTERRAIN:
+					self.terrain.move_terrain()
+					print "Move terrain"
 				if e.type == KEYDOWN:
 					if e.key == K_SPACE:
 						self.myMissiles.append(Missile(self.sprites["myMissile"], self.plane.getPosition(), self.myMissileMovementSpeed))
 
 					
 			self.drawSprites()
-			
 			self.applyForcesOfTheWorld()
 			self.terrain.draw(self.screen)
 			pygame.display.flip()
@@ -106,6 +112,7 @@ class Main():
 	def drawSprites(self):
 		for missile in self.myMissiles:
 			self.screen.blit(missile.getSprite(), missile.getPosition())
+			
 		self.screen.blit(self.plane.getSprite(), self.plane.getPosition())
 
 	

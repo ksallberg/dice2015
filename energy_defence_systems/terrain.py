@@ -25,7 +25,6 @@ class Terrain():
 
     # Draw the terrain to the context
     def draw(self, screen):
-        self.move_terrain()
         vertices = [(0,screen.get_height())]
         for i in range(0, self.point_amount):
             red = (204, 161, 131)
