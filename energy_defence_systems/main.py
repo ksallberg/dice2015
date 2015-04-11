@@ -12,7 +12,7 @@ class Main():
 	screen	= None
 	planePosition = [100,150]
 	deltaMovement = 2
-    terrain = None
+	terrain = None
 
 	def __init__(self):
 		print "hello"
@@ -20,22 +20,21 @@ class Main():
 
 		pygame.display.set_caption('Wallstreet Tycoon')
 
-        self.terrain = Terrain()
-        self.screen = pygame.display.set_mode((500,
-                                               300))
-        self.clock = pygame.time.Clock()
-
-    def main_loop(self):
-        while True:
-            print "hello im main loop"
-            self.screen.fill((0,0,0))
-            self.terrain.draw(self.screen)
-            pygame.display.flip()
-            self.clock.tick(60)
+		self.terrain = Terrain()
 		self.screen = pygame.display.set_mode((800,400))
 		self.clock = pygame.time.Clock()
 		self.sprites["plane"] = pygame.image.load(os.path.join('sprites','plane.png'))
 		self.sprites["missile"] = pygame.image.load(os.path.join('sprites','missile.png'))
+		
+		
+	def main_loop(self):
+		while True:
+			print "hello im main loop"
+			self.screen.fill((0,0,0))
+			self.terrain.draw(self.screen)
+			pygame.display.flip()
+			self.clock.tick(60)
+		
 
 
 	def main_loop(self):
@@ -49,7 +48,7 @@ class Main():
 			if keys[K_DOWN]:
 				self.planePosition[1] = self.planePosition[1] + self.deltaMovement;
 			if keys[K_SPACE]:
-				self.myMissiles.append([self.planePosition[0] + self.sprites["missile"].width, self.planePosition[1]])
+				self.myMissiles.append([self.planePosition[0] + self.sprites["missile"].get_width(), self.planePosition[1]])
 			
 			for e in pygame.event.get():
 				continue
