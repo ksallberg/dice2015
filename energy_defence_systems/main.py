@@ -46,13 +46,17 @@ class Plane():
 		return (self.x, self.y)
 		
 	def moveUp(self):
-		self.y -= self.deltaMovement
+		if self.y - self.deltaMovement > 0:
+			self.y -= self.deltaMovement
 	def moveDown(self):
-		self.y += self.deltaMovement
+		if self.y + self.deltaMovement < 400:
+			self.y += self.deltaMovement
 	def moveRight(self):
-		self.x += self.deltaMovement
+		if self.x + self.deltaMovement < (800 - self.sprite.get_rect().width):
+			self.x += self.deltaMovement
 	def moveLeft(self):
-		self.x -= self.deltaMovement
+		if self.x - self.deltaMovement > 0:
+			self.x -= self.deltaMovement
 
 
 		
