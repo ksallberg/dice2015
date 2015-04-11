@@ -25,17 +25,6 @@ class Main():
 		self.clock = pygame.time.Clock()
 		self.sprites["plane"] = pygame.image.load(os.path.join('sprites','plane.png'))
 		self.sprites["missile"] = pygame.image.load(os.path.join('sprites','missile.png'))
-		
-		
-	def main_loop(self):
-		while True:
-			print "hello im main loop"
-			self.screen.fill((0,0,0))
-			self.terrain.draw(self.screen)
-			pygame.display.flip()
-			self.clock.tick(60)
-		
-
 
 	def main_loop(self):
 		while True:
@@ -55,6 +44,7 @@ class Main():
 			
 			self.drawSprites()
 			
+			self.terrain.draw(self.screen)
 			pygame.display.flip()
 	
 	def drawSprites(self):
