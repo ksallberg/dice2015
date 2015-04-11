@@ -3,6 +3,15 @@ import os.path
 from pygame.locals import *
 from terrain import Terrain
 
+
+class Cannon():
+	def __init__(self, sprite, position):
+		self.sprite = sprite
+		self.position = position
+		
+	def shoot(self):
+		continue
+	
 class Plane():
 	def __init__(self, sprite, initialPosition, deltaMovement):
 		self.sprite = sprite
@@ -77,10 +86,12 @@ class Main():
 				self.plane.moveUp()
 			if keys[K_DOWN]:
 				self.plane.moveDown()
-			if keys[K_SPACE]:
-				self.myMissiles.append(Missile(self.sprites["myMissile"], self.plane.getPosition(), self.myMissileMovementSpeed))
 			for e in pygame.event.get():
-				continue
+				if e.type == KEYDOWN:
+					if e.key == K_SPACE:
+						self.myMissiles.append(Missile(self.sprites["myMissile"], self.plane.getPosition(), self.myMissileMovementSpeed))
+
+					
 			self.drawSprites()
 			
 			self.applyForcesOfTheWorld()
@@ -93,9 +104,9 @@ class Main():
 			missile.applyForce()
 		
 	def drawSprites(self):
-		self.screen.blit(self.plane.getSprite(), self.plane.getPosition())
 		for missile in self.myMissiles:
 			self.screen.blit(missile.getSprite(), missile.getPosition())
+		self.screen.blit(self.plane.getSprite(), self.plane.getPosition())
 
 	
 if __name__ == '__main__':
