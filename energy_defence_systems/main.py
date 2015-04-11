@@ -134,7 +134,7 @@ class Main():
 				if e.type == self.DRAWTERRAIN:
 					self.terrain.move_terrain()
 				if e.type == KEYDOWN:
-					if e.key == K_SPACE:
+					if e.key == K_SPACE and len(self.myMissiles) == 0:
 						self.myMissiles.append(Missile(self.sprites["myMissile"], self.plane.getPosition(), self.myMissileMovementSpeed))
 
 			self.terrain.draw(self.screen)
@@ -214,8 +214,8 @@ class Main():
 		
 		
 		for missile in self.myMissiles:
-			if missile.getPosition()[0] > self.screen.get_width:
-				removeObjects.append(self.myMissles)
+			if missile.getPosition()[0] > self.screen.get_width():
+				removeObjects.append(missile)
 			else:
 				self.screen.blit(missile.getSprite(), missile.getPosition())
 		
