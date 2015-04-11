@@ -48,6 +48,11 @@ class Plane():
 		self.y -= self.deltaMovement
 	def moveDown(self):
 		self.y += self.deltaMovement
+	def moveRight(self):
+		self.x += self.deltaMovement
+	def moveLeft(self):
+		self.x -= self.deltaMovement
+
 
 		
 class Missile():
@@ -111,6 +116,10 @@ class Main():
 				self.plane.moveUp()
 			if keys[K_DOWN]:
 				self.plane.moveDown()
+			if keys[K_LEFT]:
+				self.plane.moveLeft()
+			if keys[K_RIGHT]:
+				self.plane.moveRight()
 			for e in pygame.event.get():
 				if e.type == self.DRAWTERRAIN:
 					self.terrain.move_terrain()
