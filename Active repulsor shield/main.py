@@ -39,7 +39,7 @@ class AIPlayer():
 		while True:
 			row = random.randint(0,2)
 			col = random.randint(0,4)
-			print self.getNumberOfMoves(board)
+#			print self.getNumberOfMoves(board)
 			if board[row][col] == 'x' or board[row][col] == '+':
 				if (row,col) == (0,0) and self.getNumberOfMoves(board) > 1:
 					continue
@@ -48,7 +48,7 @@ class AIPlayer():
 	
 	def getNumberOfMoves(self, board):
 		flat = [item for sublist in board for item in sublist]
-		filtered = [item for item in flat, item == 'x' or item == '+']
+		filtered = [item for item in flat if item == 'x' or item == '+']
 		return len(filtered)
 		
 	def __str__(self):
@@ -73,7 +73,7 @@ if __name__ == '__main__':
 		session = ActiveRepulsorShield(player1, player2)
 		while not session.weHaveAWinner():
 			session.makeMove()
-			print str(session.currentPlayer)
+#			print str(session.currentPlayer)
 			if session.weHaveAWinner():
 				if str(session.currentPlayer) == "1":
 					player1wins += 1

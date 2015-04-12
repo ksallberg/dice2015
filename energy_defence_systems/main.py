@@ -16,7 +16,7 @@ class Cannon():
 		self.waittime = timeToWaitUntilShoot
 		self.timeAtInstantiating = pygame.time.get_ticks()
 		self.fired = False
-		
+
 	def getSprite(self):
 		return self.sprite
 	def getPosition(self):
@@ -30,21 +30,20 @@ class Cannon():
 	def applyForce(self):
 		self.x += self.deltaMovement[0]
 		self.y += self.deltaMovement[1]
-		
-	
+
 class Plane():
 	def __init__(self, sprite, initialPosition, deltaMovement):
 		self.sprite = sprite
 		self.x = initialPosition[0]
 		self.y = initialPosition[1]
 		self.deltaMovement = deltaMovement
-		
+
 	def getSprite(self):
 		return self.sprite
-		
+
 	def getPosition(self):
 		return (self.x, self.y)
-		
+
 	def moveUp(self):
 		if self.y - self.deltaMovement > 0:
 			self.y -= self.deltaMovement
@@ -58,27 +57,23 @@ class Plane():
 		if self.x - self.deltaMovement > 0:
 			self.x -= self.deltaMovement
 
-
-		
 class Missile():
 	def __init__(self, sprite, initialPosition, deltaMovement):
 		self.sprite = sprite
 		self.x = initialPosition[0]
 		self.y = initialPosition[1]
 		self.deltaMovement = deltaMovement
-		
+
 	def getSprite(self):
 		return self.sprite
-		
+
 	def getPosition(self):
 		return (self.x, self.y)
-	
+
 	def applyForce(self):
 		self.x += self.deltaMovement[0]
 		self.y += self.deltaMovement[1]
-	
-		
-		
+
 class Main():
 
 	sprites = {}
@@ -89,19 +84,21 @@ class Main():
 	screen	= None
 	deltaMovement = 2
 	terrain = None
+	terrain2 = None
 	DRAWTERRAIN = USEREVENT + 1
+	DRAWTERRAIN2 = DRAWTERRAIN + 1
 
 	def __init__(self):
-		print "hello"
 		pygame.init()
-		
+
 		pygame.display.set_caption('Swaglord Rocket Hyper Mega Ultra Drive')
 
 		self.score = 0;
 		self.terrain = Terrain(20, (204, 161, 131), 300)
+		self.terrain2 = Terrain(50, (51, 25, 0), 250)
 		self.screen = pygame.display.set_mode((800,400))
 		self.clock = pygame.time.Clock()
-		
+
 		planeSprite = pygame.image.load(os.path.join('sprites','plane.png'))
 		self.plane = Plane(planeSprite, [200,150], 3)
 		self.sprites["myMissile"] = pygame.image.load(os.path.join('sprites','myMissile2.png'))
@@ -113,6 +110,7 @@ class Main():
 		self.enemyMissileMovementSpeed = [-1, -2]
 		self.gameOver = False
 		pygame.time.set_timer(self.DRAWTERRAIN, 50)
+		pygame.time.set_timer(self.DRAWTERRAIN2, 75)
 		self.scoreFont = pygame.font.SysFont("monospace", 20)
 
 
@@ -133,10 +131,13 @@ class Main():
 			for e in pygame.event.get():
 				if e.type == self.DRAWTERRAIN:
 					self.terrain.move_terrain()
+				if e.type == self.DRAWTERRAIN2:
+					self.terrain2.move_terrain()
 				if e.type == KEYDOWN:
 					if e.key == K_SPACE and len(self.myMissiles) == 0:
 						self.myMissiles.append(Missile(self.sprites["myMissile"], self.plane.getPosition(), self.myMissileMovementSpeed))
 
+			self.terrain2.draw(self.screen)
 			self.terrain.draw(self.screen)
 			self.drawOrRemoveSprites()
 			self.applyForcesOfTheWorld()
@@ -146,20 +147,19 @@ class Main():
 			pygame.display.flip()
 			if random.randint(0,100) == 1:
 				self.cannons.append(Cannon(self.sprites['cannon'], [850,360], (-4,0), random.randint(1000,4000)))
-			
+
 		self.screen.fill((179, 253 ,255))
 		self.screen.blit(self.sprites["gameover"], (0,0))
 		self.scoreLabel = self.scoreFont.render(str((self.score)).zfill(6), 1, (255,0,0))
 		self.screen.blit(self.scoreLabel, (720, 0))
 		pygame.display.flip()
 		time.sleep(1000)
-		
-		
+
 	def checkIfCannonsShouldShoot(self):
 		for cannon in self.cannons:
 			if cannon.shoot():
 				self.enemyMissiles.append(Missile(self.sprites["enemyMissile"], cannon.getPosition(), self.enemyMissileMovementSpeed))
-	
+
 	def checkCollisionWithShip(self):
 		for missile in self.enemyMissiles:
 			plane_rect = self.plane.getSprite().get_rect()
@@ -191,7 +191,6 @@ class Main():
 					self.myMissiles.remove(ownMissile)
 					self.enemyMissiles.remove(enemyMissile)
 
-
 	def applyForcesOfTheWorld(self):
 		for missile in self.myMissiles:
 			missile.applyForce()
@@ -199,55 +198,49 @@ class Main():
 		for missile in self.enemyMissiles:
 			missile.applyForce()
 
-			
 		for cannon in self.cannons:
 			cannon.applyForce()
 
 	def removeObjectsFromList(self, listOfItemsToRemove, originalList):
 		for item in listOfItemsToRemove:
 			originalList.remove(item)
-			
+
 	def drawOrRemoveSprites(self):
 		removeObjects = []
-		
-		
-		
-		
+
 		for missile in self.myMissiles:
 			if missile.getPosition()[0] > self.screen.get_width():
 				removeObjects.append(missile)
 			else:
 				self.screen.blit(missile.getSprite(), missile.getPosition())
-		
+
 		self.removeObjectsFromList(removeObjects, self.myMissiles)
-		
+
 		removeObjects = []
-		
+
 		for cannon in self.cannons:
 			if cannon.getPosition()[0] < 0:
 				removeObjects.append(cannon)
 			else:
 				self.screen.blit(cannon.getSprite(), cannon.getPosition())
-		
+
 		self.removeObjectsFromList(removeObjects, self.cannons)
 
-		
 		removeObjects = []
-			
+
 		for missile in self.enemyMissiles:
 			if missile.getPosition()[1] < 0:
 				removeObjects.append(missile)
 			else:
 				self.screen.blit(missile.getSprite(), missile.getPosition())
-		
+
 		self.removeObjectsFromList(removeObjects, self.enemyMissiles)
-		
+
 		self.scoreLabel = self.scoreFont.render(str((self.score)).zfill(6), 1, (255,0,0))
 		self.screen.blit(self.scoreLabel, (720, 0))
-		
+
 		self.screen.blit(self.plane.getSprite(), self.plane.getPosition())
 
-	
 if __name__ == '__main__':
 	main = Main()
 	main.main_loop()

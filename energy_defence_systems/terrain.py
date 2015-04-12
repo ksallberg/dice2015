@@ -3,16 +3,12 @@ import random
 
 class Terrain():
 
-    # a list of y coords
-    point_amount = 35
-    points = []
-    x_space = 25
-    color = None
-    baseline = 0
-    vertices = []
-
     # create some terrain points
     def __init__(self, mountain_height, color, baseline):
+        self.point_amount = 35
+        self.points = []
+        self.vertices = []
+        self.x_space = 25
         self.mountain_height = mountain_height
         self.color = color
         self.baseline = baseline
