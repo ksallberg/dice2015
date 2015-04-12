@@ -1,5 +1,6 @@
 import Control.Monad
 import Data.List
+import Data.Function (on)
 
 type Pokemon = String
 type Chain   = [Pokemon]
@@ -49,10 +50,10 @@ allExhausted br = and [exhausted | (exhausted, _) <- br]
 -- Look at the last pokemon in a list, and match it with the first pokemon
 -- in the list of all pokemons, the resulting list is strict (no duplicates)
 matchOneStep :: Chain -> [Chain]
-matchOneStep poke = (nub [nub $ poke ++ [toTest] | toTest <- pokemons,
-                         lookFor == head toTest]) \\ [poke]
+matchOneStep poke = ls \\ [poke]
     where lookFor = (last . last) poke
-
+          ls = nub [nub $ poke ++ [toTest] | toTest <- pokemons,
+                                   lookFor == head toTest]
 
 -- In a chain of pokemons, add as many pokemons as possible
 runMatching :: [Branch] -> [Branch]
@@ -65,19 +66,12 @@ test :: [Branch]
 test = runMatching [(False, ["yamask"])]
 
 findL :: Pokemon -> Chain
-findL poke = foldr (\(_, this) longest ->
-              case (length this) > (length longest) of
-                  True  -> this
-                  False -> longest)
-        [] (runMatching [(isExhausted [poke], [poke])])
+findL poke = maximumBy (compare `on` length) (map snd ls)
+    where ls = runMatching [(isExhausted [poke], [poke])]
 
 findAll :: [Chain]
 findAll = map findL startLs
     where startLs = [poke | poke <- pokemons, not $ isExhausted [poke]]
 
 findLongest :: Chain
-findLongest = foldr (\ls longest ->
-                    case (length ls) > (length longest) of
-                        True  -> ls
-                        False -> longest
-                    ) [] findAll
+findLongest = maximumBy (compare `on` length) findAll
